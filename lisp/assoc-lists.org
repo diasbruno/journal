@@ -1,0 +1,127 @@
+* Assoc lists
+
+`assoc` lists are like a key/value pair.
+
+#+BEGIN_SRC lisp
+(defvar *ls* nil)
+(setq *ls* '((a . 1) (b . 2)))
+#+END_SRC
+
+#+RESULTS:
+: ((A . 1) (B . 2))
+
+** Getting items...
+
+*** assoc
+
+`assoc` gets an item whose key matches with the passed item.
+
+Default test is `equal`.
+
+assoc ITEM                   -- the item to test.
+      ALIST                  -- the list.
+      &KEY
+        KEY                  -- function to get the key to test.
+        (TEST NIL TESTP)     -- function to test.
+        (TEST-NOT NIL NOTP)  -- function to test not.
+
+#+BEGIN_SRC lisp
+(assoc 'b *ls*)
+#+END_SRC
+
+#+RESULTS:
+: (B . 2)
+
+*** rassoc
+
+`rassoc` gets an item whose value matches with the passed item.
+
+Default test is `equal`.
+
+#+BEGIN_SRC lisp
+(rassoc 1 *ls*)
+#+END_SRC
+
+#+RESULTS:
+: (A . 1)
+
+** Setting items...
+
+*** acons
+
+Using `acons` will push to the front of the list.
+
+#+BEGIN_SRC lisp
+(acons 'c 3 *ls*)
+#+END_SRC
+
+#+RESULTS:
+: ((C . 3) (C . 2) (C . 2) (C . 2) (A . 1) (B . 2))
+
+#+BEGIN_SRC lisp
+(acons 'c 3 *ls*)
+#+END_SRC
+
+#+RESULTS:
+: ((C . 3) (C . 2) (C . 2) (C . 2) (A . 1) (B . 2))
+
+Same result can be accomplished using `push`.
+
+#+BEGIN_SRC lisp
+(push '(c . 2) *ls*)
+#+END_SRC
+
+#+RESULTS:
+: ((C . 2) (C . 2) (C . 2) (C . 2) (A . 1) (B . 2))
+
+*** 
+*** find
+
+`find` can be used to get an element from the assoc list.
+
+find ITEM          -- the item to test
+     SEQUENCE      -- the list
+     &REST
+       ARGS        -- ?
+     &KEY
+       FROM-END    -- reversed
+       (START 0)   -- sub list
+       END         -- end of sub list
+       KEY         -- function or symbol to find the key on the structure
+       TEST        -- test function (or synbol)
+       TEST-NOT    -- test function (or symbol)
+
+#+BEGIN_SRC lisp
+(find 'a *ls* :key 'car)
+#+END_SRC
+
+
+** Update an item (key or value)
+
+`rplaca` changes the key of a pair.
+
+#+BEGIN_SRC lisp
+(rplaca (cons 'a 1) 'b)
+#+END_SRC
+
+#+RESULTS:
+: (B . 1)
+
+`rplacd` changes the value of a pair.
+
+#+BEGIN_SRC lisp
+(rplacd (cons 'a 1) 2)
+#+END_SRC
+
+#+RESULTS:
+: (A . 2)
+
+Both functions can be used to update an item of the assoc list.
+
+#+BEGIN_SRC lisp
+(rplacd (assoc 'a *ls*) 50)
+*ls*
+#+END_SRC
+
+#+RESULTS:
+: ((C . 2) (C . 2) (C . 2) (C . 2) (A . 50) (B . 2))
